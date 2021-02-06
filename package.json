@@ -4,7 +4,9 @@
   "description": "An app to meet new people worldwide with live language translation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon server.js",
+    "peerStart": "node_modules\\.bin\\peerjs.cmd --port 3001"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,15 @@
   },
   "homepage": "https://github.com/Michael-Kagnew/UOttawaHackGr27#readme",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "http": "0.0.1-security"
+    "http": "0.0.1-security",
+    "peer": "^0.6.1",
+    "socket.io": "^3.1.1",
+    "uuid": "^8.3.2",
+    "ws": "^7.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
