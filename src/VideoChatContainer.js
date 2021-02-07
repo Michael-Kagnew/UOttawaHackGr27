@@ -14,11 +14,12 @@ var sdk = require("microsoft-cognitiveservices-speech-sdk");
 var audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
 var translationConfig = sdk.SpeechTranslationConfig.fromSubscription("a72f52f6a88948ecb97668c8596b90e6", "canadacentral");
 translationConfig.speechRecognitionLanguage = "en-US";
-translationConfig.addTargetLanguage("en-US");
+translationConfig.addTargetLanguage("de");
 
 var recognizer = new sdk.TranslationRecognizer(translationConfig, audioConfig);
 
 recognizer.recognized = function (s, e) {
+  console.log("Hello");
   var str = "\r\n(recognized)  Reason: " + sdk.ResultReason[e.result.reason] + " Text: " + e.result.text + " Translations:";
 
   var language = "de";
@@ -28,15 +29,16 @@ recognizer.recognized = function (s, e) {
   console.log(str);
 };
 
-recognizer.recognizeOnceAsync(
-  function (result) {
-    recognizer.close();
-    recognizer = undefined;
-  },
-  function (err) {
-    recognizer.close();
-    recognizer = undefined;
-  });
+      // start the recognizer and wait for a result.
+      recognizer.startContinuousRecognitionAsync(
+        function (result) {
+          recognizer.close();
+          recognizer = undefined;
+        },
+        function (err) {
+          recognizer.close();
+          recognizer = undefined;
+        });
 
 class VideoChatContainer extends React.Component {
   constructor (props) {
@@ -52,8 +54,7 @@ class VideoChatContainer extends React.Component {
   }
 
     componentDidMount = async () => {
-      firebase.initializeApp(config)
-
+      firebase.initializeApp(config);
       // getting local video stream
       const localStream = await initiateLocalStream()
       this.localVideoRef.srcObject = localStream
@@ -82,6 +83,7 @@ class VideoChatContainer extends React.Component {
     }
 
     startCall = async (username, userToCall) => {
+
       const { localConnection, database, localStream } = this.state
       listenToConnectionEvents(localConnection, username, userToCall, database, this.remoteVideoRef, doCandidate)
       // create an offer
@@ -93,7 +95,7 @@ class VideoChatContainer extends React.Component {
     }
 
     setLocalVideoRef = ref => {
-      this.localVideoRef = ref
+      this.localVideoRef = ref;
     }
 
     setRemoteVideoRef = ref => {
